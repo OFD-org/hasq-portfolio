@@ -1261,6 +1261,8 @@ html {
   }
 
   #experience details::details-content {
+    /* Keep entry margins inside the animated box when its height becomes auto. */
+    display: flow-root;
     block-size: 0;
     opacity: 0;
     overflow: clip;

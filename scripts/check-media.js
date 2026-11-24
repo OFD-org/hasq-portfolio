@@ -11,7 +11,10 @@ for (const work of works) {
   if (work.video) assert.ok(work.preview && work.duration > 0, `Missing preview metadata: ${work.id}`);
   for (const key of ['poster', 'preview', 'video', 'image']) {
     if (!work[key]) continue;
-    assert.ok((await stat(work[key])).size > 0, `Empty ${key}: ${work.id}`);
+    const size = (await stat(work[key])).size;
+    assert.ok(size > 0, `Empty ${key}: ${work.id}`);
+    assert.ok(size < 25 * 1024 * 1024, `Media exceeds the 25 MiB upload budget: ${work[key]}`);
+    assert.ok(work[key].startsWith('assets/works/media/'), `Media must use a deployable optimized asset: ${work[key]}`);
   }
   if (work.preview) {
     const file = await open(work.preview);

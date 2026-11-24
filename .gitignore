@@ -1,3 +1,9 @@
 node_modules/
 *.zip
+# Original exports stay local. The website uses assets/works/media instead.
+/2D & 3D_motion/
+/performance_creatives/
+/SaaS _ Brand content (in progress)/
+/artifacts/
+/assets/works/media/*-full.mp4
 

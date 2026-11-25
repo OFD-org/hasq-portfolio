@@ -55,9 +55,11 @@ new ResizeObserver(() => {
 }).observe(siteHeader);
 const finePointer = matchMedia('(hover: hover) and (pointer: fine)');
 const title = document.querySelector('.hero h1');
+function decorateTitle() {
 title.setAttribute('aria-label', title.textContent.trim());
 for (const line of title.children) {
   line.setAttribute('aria-hidden', 'true');
+  line.textContent = line.textContent;
   for (const node of [...line.childNodes]) {
     if (node.nodeType !== Node.TEXT_NODE) continue;
     const letters = document.createDocumentFragment();
@@ -70,6 +72,10 @@ for (const line of title.children) {
     node.replaceWith(letters);
   }
 }
+
+}
+decorateTitle();
+document.addEventListener('languagechange', decorateTitle);
 
 function playIntro() {
   if (motion.matches || location.hash || scrollY > 0) return;

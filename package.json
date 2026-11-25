@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "node scripts/serve.js",
-    "check": "node --check motion.js && node --check js/works.js && node --check js/components/work-slider.js && node --check js/components/work-viewer.js && node --check scripts/serve.js && node --check scripts/prepare-media.js && node scripts/check-media.js",
+    "check": "node --check js/i18n.js && node --check js/data/translations.js && node --check motion.js && node --check js/works.js && node --check js/components/work-slider.js && node --check js/components/work-viewer.js && node --check scripts/serve.js && node --check scripts/prepare-media.js && node scripts/check-media.js",
     "media:prepare": "node scripts/prepare-media.js"
   },
   "devDependencies": {

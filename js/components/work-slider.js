@@ -1,3 +1,4 @@
+import { t, workCount } from "../i18n.js";
 import { WorkViewer } from "./work-viewer.js";
 
 const collections = [
@@ -51,10 +52,10 @@ export class WorkSlider {
       const button = document.createElement("button");
       button.type = "button";
       button.dataset.collection = collection.id;
-      button.textContent = collection.title;
+      button.textContent = t(collection.title);
       if (collection.id === "brand") {
         const badge = document.createElement("small");
-        badge.textContent = "In progress";
+        badge.textContent = t("In progress");
         button.append(badge);
       }
       button.addEventListener("click", () => this.setCollection(collection));
@@ -103,6 +104,19 @@ export class WorkSlider {
       { threshold: 0.15 },
     );
     this.setCollection(collections[0]);
+    document.addEventListener("languagechange", () => {
+      this.tabs.querySelectorAll("button").forEach(button => {
+        const collection = collections.find(item => item.id === button.dataset.collection);
+        button.firstChild.textContent = t(collection.title);
+        const badge = button.querySelector("small");
+        if (badge) badge.textContent = t("In progress");
+      });
+      this.root.querySelector(".works-description").textContent = t(this.collection.description);
+      this.filters.querySelectorAll("button").forEach(button => {
+        button.textContent = t(this.collection.filters.find(([id]) => id === button.dataset.filter)[1]);
+      });
+      this.render(this.filter);
+    });
   }
 
   setCollection(collection) {
@@ -116,12 +130,12 @@ export class WorkSlider {
         ),
       );
     this.root.querySelector(".works-description").textContent =
-      collection.description;
+      t(collection.description);
     this.filters.replaceChildren();
     collection.filters.forEach(([id, title]) => {
       const button = document.createElement("button");
       button.type = "button";
-      button.textContent = title;
+      button.textContent = t(title);
       button.dataset.filter = id;
       button.addEventListener("click", () => this.render(id));
       this.filters.append(button);
@@ -130,6 +144,7 @@ export class WorkSlider {
   }
 
   render(filter) {
+    this.filter = filter;
     this.select(null);
     this.observer.disconnect();
     this.lastNavigated = null;
@@ -154,10 +169,10 @@ export class WorkSlider {
     this.root.querySelector(".works-navigation").hidden = filter === "stills";
     this.root.querySelector(".works-instruction").textContent =
       filter === "stills"
-        ? "Open an image to explore the full composition."
-        : "Hover or tap to preview. Open a film to watch with sound.";
+        ? t("Open an image to explore the full composition.")
+        : t("Hover or tap to preview. Open a film to watch with sound.");
     this.root.querySelector(".works-count").textContent =
-      `${projects.length} ${projects.length === 1 ? "work" : "works"} · ${this.collection.title}`;
+      `${workCount(projects.length)} · ${t(this.collection.title)}`;
     this.updateNavigation();
     this.cards.forEach((card) => this.observer.observe(card));
   }
@@ -172,7 +187,7 @@ export class WorkSlider {
     preview.className = "work-preview";
     preview.setAttribute(
       "aria-label",
-      `${project.image ? "View image:" : "Preview"} ${project.title}`,
+      `${project.image ? t("View image:") : t("Preview")} ${t(project.title)}`,
     );
     if (!project.image) preview.setAttribute("aria-pressed", "false");
     const poster = document.createElement("img");
@@ -195,25 +210,25 @@ export class WorkSlider {
     const format = document.createElement("span");
     format.className = "work-format";
     format.textContent = project.image
-      ? "Still"
+      ? t("Still")
       : `${Math.floor(project.duration / 60)}:${String(project.duration % 60).padStart(2, "0")}`;
     const status = document.createElement("span");
     status.className = "work-status";
-    status.textContent = project.image ? "View composition" : "Preview";
+    status.textContent = project.image ? t("View composition") : t("Preview");
     preview.append(format, status);
     const caption = document.createElement("div");
     caption.className = "work-caption";
     const category = document.createElement("p");
     category.className = "work-category";
-    category.textContent = project.category;
+    category.textContent = t(project.category);
     const title = document.createElement("h3");
     title.className = "work-title";
-    title.textContent = project.title;
+    title.textContent = t(project.title);
     const open = document.createElement("button");
     open.type = "button";
     open.className = "work-open";
-    open.textContent = project.image ? "View image" : "Watch full film";
-    open.setAttribute("aria-label", `${open.textContent}: ${project.title}`);
+    open.textContent = project.image ? t("View image") : t("Watch full film");
+    open.setAttribute("aria-label", `${open.textContent}: ${t(project.title)}`);
     open.addEventListener("click", () => {
       this.select(null);
       this.viewer.open(project, open);
@@ -226,11 +241,11 @@ export class WorkSlider {
         return;
       }
       card.classList.add("is-playing");
-      status.textContent = "Preview · Muted";
+      status.textContent = t("Preview · Muted");
     });
     video?.addEventListener("error", () => {
       if (this.active === card)
-        status.textContent = "Preview unavailable · Open full film";
+        status.textContent = t("Preview unavailable · Open full film");
     });
     card.addEventListener("pointerenter", (event) => {
       if (
@@ -270,7 +285,7 @@ export class WorkSlider {
           .querySelector(".work-preview")
           .setAttribute("aria-pressed", "false");
       previous.querySelector(".work-status").textContent =
-        previous.querySelector("video") ? "Preview" : "View composition";
+        previous.querySelector("video") ? t("Preview") : t("View composition");
     }
     this.active = card;
     if (!card) return;
@@ -281,13 +296,13 @@ export class WorkSlider {
     const video = card.querySelector("video");
     if (!video) return;
     card.querySelector(".work-preview").setAttribute("aria-pressed", "true");
-    card.querySelector(".work-status").textContent = "Loading preview…";
+    card.querySelector(".work-status").textContent = t("Loading preview…");
     if (!video.hasAttribute("src")) video.src = video.dataset.src;
     if (video.error) video.load();
     video.play().catch(() => {
       if (this.active === card && this.playRequest === request)
         card.querySelector(".work-status").textContent =
-          "Preview unavailable · Open full film";
+          t("Preview unavailable · Open full film");
     });
   }
 

@@ -1128,12 +1128,59 @@ body::before {
 }
 
 .contact-section {
-  padding: clamp(32px, 5vw, 64px) 0;
+  position: relative;
+  isolation: isolate;
+  padding: clamp(72px, 10vw, 140px) 16px;
   border-top: 1px solid var(--line);
+  text-align: center;
+  background: radial-gradient(ellipse at center, #5744b51a, transparent 68%);
+}
+
+.contact-eyebrow {
+  margin: 0 0 24px;
+  color: #b7acff;
+  font-size: 0.875rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
 .contact-section h2 {
   margin: 0;
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -0.045em;
+}
+
+.contact-email {
+  display: block;
+  width: fit-content;
+  margin: 30px auto;
+  color: #b7acff;
+  overflow-wrap: anywhere;
+  text-decoration: none;
+}
+
+.contact-cta {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60px;
+  min-width: min(260px, 100%);
+  padding: 16px 32px;
+  border: 1px solid #b6b0d4;
+  border-radius: 100px;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+}
+
+.contact-cta:hover {
+  background: #eeebff;
+  color: #201c38;
+}
+
+.contact-email:hover {
+  text-decoration: underline;
 }
 
 .expertise-list {
@@ -1142,9 +1189,10 @@ body::before {
 
 .contact-links {
   display: flex;
+  justify-content: center;
   flex-wrap: wrap;
   gap: 0.25rem 1.75rem;
-  margin-top: 1rem;
+  margin-top: 32px;
   font-style: normal;
 }
 

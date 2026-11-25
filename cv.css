@@ -1199,6 +1199,7 @@ body::before {
 .contact-links a {
   display: inline-block;
   padding: 0.5rem 0;
+  text-decoration: none;
 }
 
 .contact-links a:hover {
